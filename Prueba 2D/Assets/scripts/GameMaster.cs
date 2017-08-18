@@ -18,8 +18,6 @@ public class GameMaster : MonoBehaviour {
 	
 	
 	void Update () {
-
-        playerDeathChecker();
         Vector2 playerPosition = player.transform.position;
 
         if (playerPosition.y < minYValue)
@@ -36,12 +34,14 @@ public class GameMaster : MonoBehaviour {
 
     }
 
-    public void playerDeathChecker()
+    public void handlePlayerDeath(float seconds)
     {
-        if (player.GetComponent<Player_Controller>().health <= 0)
-        {
-            Destroy(player);
-        }
+        Invoke ("destroyPlayerObject", seconds);
+    }
+
+    public void destroyPlayerObject()
+    {
+        Destroy(player);
     }
 
     public bool updateSpawn(int prioritySpawn, Vector2 v)

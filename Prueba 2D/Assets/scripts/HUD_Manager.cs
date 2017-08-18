@@ -8,13 +8,17 @@ public class HUD_Manager : MonoBehaviour {
     public static HUD_Manager Instance { get; set; }
 
     public Image imgHat;
+    public Image backgroundHats;
     public float hatSize = 1;
     public float hatVerticalSeparation = 30;
+    public float hatHorizontalSeparation = 30;
 
     private RectTransform rectTrans;
 	void Awake () {
         Instance = this;
         rectTrans = GetComponent<RectTransform>();
+
+        backgroundHats = Instantiate(backgroundHats, transform, false);
     }
 	
 	
@@ -25,9 +29,8 @@ public class HUD_Manager : MonoBehaviour {
     public void updateLifes(float newLifeValue)
     {
         Debug.Log("updating... "+ newLifeValue + " lifes!");
-        Vector2 position;
         // Destroys old children
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             Destroy(transform.GetChild(i).gameObject);
         }
@@ -37,7 +40,7 @@ public class HUD_Manager : MonoBehaviour {
         {
             Debug.Log("index = "+i);
             Image lifeHat = Instantiate(imgHat, transform, false);
-            lifeHat.GetComponent<RectTransform>().anchoredPosition = new Vector2(22 + hatVerticalSeparation * i, -22);
+            lifeHat.GetComponent<RectTransform>().anchoredPosition = new Vector2( hatVerticalSeparation *(0.5f + i), -hatHorizontalSeparation);
             
         } 
     }
