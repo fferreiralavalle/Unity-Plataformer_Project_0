@@ -59,7 +59,7 @@ public class Enemy_simple_Spawn_Controller : MonoBehaviour {
             tuerca.GetComponent<Animator>().SetTrigger("Disabling");
             Invoke("toggleLight", .3f);
             Invoke("toggleLight", .6f);
-            Invoke("toggleLight", 1.1f);
+            Invoke("toggleLight", 1.54f);
 
 
         }

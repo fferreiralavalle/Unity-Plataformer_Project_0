@@ -13,24 +13,38 @@ public class GameMaster : MonoBehaviour {
     public Vector2 initialSpawn = Vector2.zero; 
     public int currentPrioritySpawn = 0;
 
-    private Vector2 currentRespawn;
+    private Vector3 currentRespawn;
     private GameObject player { get; set; }
 
     void Awake () {
-        currentRespawn = initialSpawn;
 
+        if (player == null && playerPrefab != null)
+        {
+            player = Instantiate(playerPrefab, transform);
+        }
+        Debug.Log("This = " + this + " / Instance = " + (Instance==null));
         if (Instance == null) {
             Instance = this;
+            currentRespawn = initialSpawn;
+            Debug.Log("CurrentRespawn = " + Instance.currentRespawn);
             DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this) {
+            //Does this when entering a new level, updates spawns and self position
+            Debug.Log("New GM found, updating...");
+            Instance.updateInitialSpawn(transform.position);
+            Instance.currentRespawn = Instance.initialSpawn;
+            Debug.Log("CurrentRespawn = " + Instance.currentRespawn);
+            Instance.transform.position = transform.position;
+            if (Instance.player != null)
+                Instance.player.transform.localPosition = Vector3.zero;
+            
             Destroy(gameObject);
         }
         
-        if (player == null){
-            player = Instantiate(playerPrefab, transform);
-        }
-            
+        
+        
+        
     }
 	
 	
@@ -74,7 +88,7 @@ public class GameMaster : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public bool updateSpawn(int prioritySpawn, Vector2 v)
+    public bool updateSpawn(int prioritySpawn, Vector3 v)
     {
         if (prioritySpawn > currentPrioritySpawn){
             currentPrioritySpawn = prioritySpawn;
@@ -83,6 +97,11 @@ public class GameMaster : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    public void updateInitialSpawn(Vector3 v)
+    {
+        initialSpawn = v;
     }
 
     public void showGameOver()

@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour {
     public AudioSource voiceSound;
     public AudioSource musicSource;
     public static SoundManager instance = null;
-    public GameObject target;
+    //public GameObject target;
 
     public float lowPitchRange = .95f;
     public float highPitchRange = 1.05f;
@@ -31,7 +31,7 @@ public class SoundManager : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
 	}
-
+    /*
     void FixedUpdate()
     {
         float posX = Mathf.SmoothDamp(
@@ -56,7 +56,7 @@ public class SoundManager : MonoBehaviour {
             0
             );
     }
-
+    */
     public void PlaySingle (AudioClip clip)
     {
         efxSource.clip = clip;
