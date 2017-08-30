@@ -7,6 +7,7 @@ public class Enemy_Controller : MonoBehaviour {
     public float maxSpeed = 5f;
     public float speed = 20f;
     public float damageDealt = 1f;
+    public float instaDeadLowerHeight = -20f;
     public AudioClip damagedSound;
     public AudioClip secretDamagedSound;
 
@@ -25,6 +26,9 @@ public class Enemy_Controller : MonoBehaviour {
 	void FixedUpdate () {
         if (!isDead)
         {
+            if (transform.position.y < instaDeadLowerHeight){
+                Destroy(gameObject);
+            }
             rb2d.AddForce(Vector2.right * speed);
 
             //asigna min y max
@@ -47,9 +51,9 @@ public class Enemy_Controller : MonoBehaviour {
     void animationDirection(){
         float dirX = rb2d.velocity.x;
         if (dirX > 0){
-            transform.localScale = new Vector2(-1f,transform.localScale.y);
+            transform.localScale = new Vector3(-1f,transform.localScale.y, 1);
         }else if (dirX < 0){
-            transform.localScale = new Vector2(1f, transform.localScale.y);
+            transform.localScale = new Vector3(1f, transform.localScale.y, 1);
         }
     }
 

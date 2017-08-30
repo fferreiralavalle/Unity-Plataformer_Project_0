@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class camara_movement : MonoBehaviour {
 
-    public GameObject target;
+    public GameObject target = null;
     public Vector2 minCamPos, maxCamPos;
+    public float yOffSet = 0.3f;
     public float smoothTime;
-    public float distanceZ;
 
     private Vector2 velocity;
 
     void Start () {
-		
+		if (target == null)
+        {
+            target = GameMaster.Instance.getPlayer();
+        }
 	}
 	
 	// Update is called once per frame
@@ -32,8 +35,8 @@ public class camara_movement : MonoBehaviour {
 
         transform.position = new Vector3(
             posX,
-            posY + (distanceZ*.25f),
-            -distanceZ
+            posY + yOffSet,
+            -1
             );
 	}
 }

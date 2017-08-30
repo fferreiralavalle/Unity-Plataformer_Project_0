@@ -5,7 +5,9 @@ using UnityEngine;
 public class Enemy_simple_Spawn_Controller : MonoBehaviour {
 
     public GameObject enemy;                // The enemy prefab to be spawned.
-    public AudioSource efxSource;           //Spawning sound
+    public AudioClip spawnSound;            //Spawning sound
+    public AudioClip spawnDownSound;
+
     public float spawnTime = 4f;            // How long between each spawn.
     //public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
 
@@ -39,6 +41,7 @@ public class Enemy_simple_Spawn_Controller : MonoBehaviour {
         {
             GameObject tuerca = transform.GetChild(0).gameObject;
             tuerca.GetComponent<Animator>().SetTrigger("Rotate");
+            audioSource.clip = spawnSound;
             audioSource.PlayDelayed(1);
         }
     }
@@ -47,7 +50,25 @@ public class Enemy_simple_Spawn_Controller : MonoBehaviour {
     {
         if (col.gameObject.tag == "Player")
         {
+            if (isDisabled)
+                return;
             isDisabled = true;
+            audioSource.clip = spawnDownSound;
+            audioSource.Play();
+            GameObject tuerca = transform.GetChild(0).gameObject;
+            tuerca.GetComponent<Animator>().SetTrigger("Disabling");
+            Invoke("toggleLight", .3f);
+            Invoke("toggleLight", .6f);
+            Invoke("toggleLight", 1.1f);
+
+
         }
+    }
+
+    public void toggleLight()
+    {
+        GameObject light = transform.Find("Light").gameObject;
+        light.SetActive(!light.activeSelf);
+        Debug.Log("light spawn is now = " + light.activeSelf);
     }
 }

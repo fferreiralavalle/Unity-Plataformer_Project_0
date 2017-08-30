@@ -24,7 +24,7 @@ public class checkGround : MonoBehaviour {
     }
 
     private void OnCollisionStay2D(Collision2D col){
-        Debug.Log("colission!");
+        //Debug.Log("colission!");
         if (col.gameObject.tag == "Ground"){
             player.grounded = true;
         }

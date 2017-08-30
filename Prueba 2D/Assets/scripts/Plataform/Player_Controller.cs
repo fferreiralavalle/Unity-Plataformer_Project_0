@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour {
 
-    public float health = 3;
+    public float initialHealth = 3;
     public float armor = 0;
 
     public float maxSpeed = 5f;
@@ -20,18 +20,24 @@ public class Player_Controller : MonoBehaviour {
 
     private Rigidbody2D rb2d;
     private Animator anim;
-    
+    private SpriteRenderer sprite;
+
     private bool keyJump;
     private bool doubleJump;
     private bool moveable = true;
     private bool isDead = false;
+    private float health = 3;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
         HUD_Manager.Instance.updateLifes(health);
         jumpNumber = 0;
+        health = initialHealth;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     // para inputs
@@ -41,13 +47,13 @@ public class Player_Controller : MonoBehaviour {
         {
             anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
             anim.SetBool("Grounded", grounded);
-            Debug.Log("Grounded" + grounded);
+            //Debug.Log("Grounded" + grounded);
 
             if (grounded)
             {
                 jumpNumber = 0;
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetButtonDown("Jump"))
             {
                 Debug.Log("jump key");
                 if (jumpNumber < maxJumps)
@@ -87,7 +93,7 @@ public class Player_Controller : MonoBehaviour {
             rb2d.velocity = new Vector2(limitedSpeed, rb2d.velocity.y);
 
             if (Mathf.Abs(vh) > 0.1)
-                transform.localScale = new Vector2(dirh, transform.localScale.y);
+                transform.localScale = new Vector3(dirh, transform.localScale.y, 1);
 
             if (keyJump)
             {
@@ -166,13 +172,17 @@ public class Player_Controller : MonoBehaviour {
 
     public void checkIfDead()
     {
-        Debug.Log("Health = " + health);
         if (health <= 0 && !isDead)
         {
             isDead = true;
             float animationDelay = 0.2f;
             Invoke("playDeathAnimWithSound", animationDelay);
             GameMaster.Instance.handlePlayerDeath(1f + animationDelay); //kills player after x seconds
+            sprite.color = new Color(1f, 1f, 1f, 0f);
+        }
+        else
+        {
+            sprite.color = new Color(1f, 1f, 1f, 1f);
         }
     }
     private void playDeathAnimWithSound()
@@ -192,4 +202,18 @@ public class Player_Controller : MonoBehaviour {
             SoundManager.instance.PlaySingle(secretKilledSound);
         }
     }
+
+    public void playDeadAnimation()
+    {
+        anim.SetTrigger("Dead");
+    }
+
+    
+    public void revive()
+    {
+        isDead = false;
+        health = initialHealth;
+        anim.SetTrigger("Revive");
+    }
+    
 }
