@@ -23,13 +23,14 @@ public class Player_Controller : MonoBehaviour {
     private SpriteRenderer sprite;
 
     private bool keyJump;
-    private bool doubleJump;
+    private int initialJumpBugFixFrames = 5;
+    private int currentJumpBugFixFrame  = 0;
     private bool moveable = true;
     private bool isDead = false;
     private float health = 3;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
@@ -41,7 +42,7 @@ public class Player_Controller : MonoBehaviour {
     }
 
     // para inputs
-    public void Update(){
+    public void Update() {
         checkIfDead();
         if (!isDead)
         {
@@ -49,17 +50,17 @@ public class Player_Controller : MonoBehaviour {
             anim.SetBool("Grounded", grounded);
             //Debug.Log("Grounded" + grounded);
 
-            if (grounded)
+            if (grounded && currentJumpBugFixFrame<=0)
             {
                 jumpNumber = 0;
+                currentJumpBugFixFrame = 0;
             }
             if (Input.GetButtonDown("Jump"))
             {
-                Debug.Log("jump key");
                 if (jumpNumber < maxJumps)
                 {
-                    Debug.Log("can jump");
                     jumpNumber++;
+                    Debug.Log("avalible jumps = "+ (maxJumps - jumpNumber));
                     keyJump = true;
                 }
             }
@@ -68,13 +69,14 @@ public class Player_Controller : MonoBehaviour {
                 transform.position = Vector2.zero;
             }
         }
-        
+
     }
 
     //F I S I C A S  y  M O V I M I E N T O
-    void FixedUpdate () {
+    void FixedUpdate() {
         if (!isDead)
         {
+            currentJumpBugFixFrame--;
             Vector2 fixedXVelocity = rb2d.velocity;
             fixedXVelocity.x *= 0.75f;
 
@@ -97,27 +99,28 @@ public class Player_Controller : MonoBehaviour {
 
             if (keyJump)
             {
-                Debug.Log("jumped");
                 jump();
             }
         }
-	}
+    }
 
     public void jump() {
         jump(jumpPower);
     }
 
-    public void jump(float jumpPowerMod){
+    public void jump(float jumpPowerMod) {
         rb2d.velocity = new Vector2(rb2d.velocity.x, 0); //reseteo Vel en y para evitar bug en plataforma medium
         rb2d.AddForce(Vector2.up * jumpPowerMod, ForceMode2D.Impulse);
         keyJump = false;
+        if (jumpNumber==1)
+            currentJumpBugFixFrame = initialJumpBugFixFrames; // corrige bug de ground = true en primer salto
     }
 
-    public void push(Vector2 force){
+    public void push(Vector2 force) {
         rb2d.AddForce(force, ForceMode2D.Impulse);
     }
 
-    public void knockBack(float enemyPosX){
+    public void knockBack(float enemyPosX) {
         if (!isDead)
         {
             float knockDirection = Mathf.Sign(transform.position.x - enemyPosX);
@@ -129,10 +132,10 @@ public class Player_Controller : MonoBehaviour {
             disableMovement();
             Invoke("enableMovement", 0.5f);
         }
-       
+
     }
 
-    public void enableMovement(){
+    public void enableMovement() {
         moveable = true;
     }
 
@@ -141,7 +144,7 @@ public class Player_Controller : MonoBehaviour {
         moveable = false;
     }
 
-    public float takeDamage(float damage){
+    public float takeDamage(float damage) {
         if (!isDead)
         {
             animPlayRegularDamage();
@@ -156,17 +159,17 @@ public class Player_Controller : MonoBehaviour {
         return 0;
     }
 
-    public float takeFallDamage(float damage){
+    public float takeFallDamage(float damage) {
         health -= damage;
         HUD_Manager.Instance.updateLifes(health);
         return damage;
     }
 
-    public void animPlayRegularDamage(){
+    public void animPlayRegularDamage() {
         animPlayRegularDamage(3f);
     }
 
-    public void animPlayRegularDamage(float seconds){
+    public void animPlayRegularDamage(float seconds) {
         anim.SetTrigger("TakeDamage");
     }
 
@@ -185,12 +188,14 @@ public class Player_Controller : MonoBehaviour {
             sprite.color = new Color(1f, 1f, 1f, 1f);
         }
     }
+
     private void playDeathAnimWithSound()
     {
         rb2d.velocity = Vector2.zero;
         Invoke("playDeathSound", 0.08f);
         anim.SetTrigger("Killed");
     }
+
     private void playDeathSound()
     {
         if (Random.value > 0.20)
@@ -207,7 +212,6 @@ public class Player_Controller : MonoBehaviour {
     {
         anim.SetTrigger("Dead");
     }
-
     
     public void revive()
     {

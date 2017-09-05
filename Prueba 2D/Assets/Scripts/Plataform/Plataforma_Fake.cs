@@ -10,6 +10,7 @@ public class Plataforma_Fake : MonoBehaviour {
     public float sideToSideTime = 1f;
 
     private Vector3 originalPosition;
+    
     private int direction = 1;
     private bool canShake = true;
 
@@ -17,6 +18,7 @@ public class Plataforma_Fake : MonoBehaviour {
     {
         originalPosition = transform.localPosition;
         Debug.Log("original pos x " + originalPosition.x);
+        
     }
 
     public void activateShake()
@@ -42,7 +44,6 @@ public class Plataforma_Fake : MonoBehaviour {
         if (transform.localPosition == destiny)
         {
             direction *= -1;
-            Debug.Log("Changed direction to "+direction);
         }
 
         // if its coming back and is in the middle then it finished the cicle
