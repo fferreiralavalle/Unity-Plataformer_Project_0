@@ -36,7 +36,7 @@ public class camara_movement : MonoBehaviour {
         transform.position = new Vector3(
             posX,
             posY + yOffSet,
-            -1
+            -10
             );
 	}
 }

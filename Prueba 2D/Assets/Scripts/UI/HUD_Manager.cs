@@ -8,9 +8,10 @@ public class HUD_Manager : MonoBehaviour {
     public static HUD_Manager Instance { get; set; }
 
     public Image imgHat;
-    public Image backgroundHats;
+    public Image imgCoin;
     public GameObject gameOverPanel;
     public GameObject healthPanel;
+    public GameObject coinsPanel;
     public GameObject dialogueBox;
     public GameObject winLevelPanel;
 
@@ -25,18 +26,12 @@ public class HUD_Manager : MonoBehaviour {
         {
             Instance = this;
             rectTrans = GetComponent<RectTransform>();
-
-            backgroundHats = Instantiate(backgroundHats, healthPanel.transform, false);
-
             dialogueBox.SetActive(false);
-
             DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this){
             Destroy(gameObject);
         }
-        
-        
     }
 
     public void updateLifes(float newLifeValue)
@@ -54,6 +49,13 @@ public class HUD_Manager : MonoBehaviour {
             lifeHat.GetComponent<RectTransform>().anchoredPosition = new Vector2( hatVerticalSeparation *(0.5f + i), -hatHorizontalSeparation);
             
         } 
+    }
+
+    public void updateCoins(float newCoins)
+    {
+        Text number = coinsPanel.GetComponentInChildren<Text>();
+        int previousCoins = int.Parse(number.text);
+        number.text = ""+newCoins;
     }
 
     public void showGameOverPanel()
@@ -80,8 +82,3 @@ public class HUD_Manager : MonoBehaviour {
         dialogueBox.SetActive(false);
     }
 }
-/*Next level YEAAAHAHHHAH!
-
-(There's no next level actually I'm sorry man) 
-(DONT PRESS ME!)
-*/

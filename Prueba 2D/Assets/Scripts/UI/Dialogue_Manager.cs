@@ -9,9 +9,10 @@ public class Dialogue_Manager : MonoBehaviour {
 
     public Text nameText;
     public Text dialogueText;
+    public float charactersPerFrame = 0.75f;
 
     private Queue<string> sentences;
-    private int currentDisplayingCharacters = 0;
+    private float currentDisplayingCharacters = 0;
     private string currentSentence = "";
     private AudioClip currentVoice;
     private bool isDialogueFree = true;
@@ -57,15 +58,22 @@ public class Dialogue_Manager : MonoBehaviour {
 
     public void displayNextSentence()
     {
-        if (sentences.Count == 0)
+
+        if (currentDisplayingCharacters < currentSentence.Length)
+        {
+            currentDisplayingCharacters = currentSentence.Length - 1;
+            print("text advanced");
+        }
+        else if (sentences.Count == 0)
         {
             endDialogue();
             return;
         }
-        
-        currentDisplayingCharacters = 0;
-        currentSentence = sentences.Dequeue();
-        
+        else
+        {
+            currentDisplayingCharacters = 0;
+            currentSentence = sentences.Dequeue();
+        }
         Debug.Log("Sentence : " + currentSentence);
     }
 
@@ -89,26 +97,24 @@ public class Dialogue_Manager : MonoBehaviour {
     {
         if (currentDisplayingCharacters < currentSentence.Length && !isDialoguePaused)
         {
-            string character = currentSentence.Substring(currentDisplayingCharacters, 1);
-            
-            if (!character.Equals(" ") && !character.Equals(".") && !character.Equals(","))
-                SoundManager.instance.RandomizeVoice(currentVoice);
+            string character = currentSentence.Substring((int)currentDisplayingCharacters, 1);
+
+            if (character.Equals(".") || character.Equals("!") || character.Equals("?"))
+            {
+                pauseDialogueForXSeconds(pausePerDotInSeconds);
+            }
+            else if (character.Equals(","))
+            {
+                pauseDialogueForXSeconds(pausePerComaInSeconds);
+            }
             else
             {
-                if (character.Equals(".") || character.Equals("!") || character.Equals("?"))
-                {
-                    pauseDialogueForXSeconds(pausePerDotInSeconds);
-                }
-                else if (character.Equals(","))
-                {
-                    pauseDialogueForXSeconds(pausePerComaInSeconds);
-                }
-                    
+                SoundManager.instance.RandomizeVoice(currentVoice);
             }
 
-            dialogueText.text = currentSentence.Substring(0, currentDisplayingCharacters + 1);
+            dialogueText.text = currentSentence.Substring(0, (int)currentDisplayingCharacters + 1);
 
-            currentDisplayingCharacters++;
+            currentDisplayingCharacters += charactersPerFrame;
         }
     }
 

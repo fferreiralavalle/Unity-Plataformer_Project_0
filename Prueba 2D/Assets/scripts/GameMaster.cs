@@ -3,33 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMaster : MonoBehaviour {
+public class GameMaster : MonoBehaviour
+{
 
     public static GameMaster Instance { get; set; }
 
     public float minYValue = -20f;
     public GameObject playerPrefab;
     public GameObject HUD;
-    public Vector2 initialSpawn = Vector2.zero; 
+    public Vector2 initialSpawn = Vector2.zero;
     public int currentPrioritySpawn = 0;
 
     private Vector3 currentRespawn;
     private GameObject player { get; set; }
+    private int playerCoins = 0;
 
-    void Awake () {
+    void Awake()
+    {
 
         if (player == null && playerPrefab != null)
         {
             player = Instantiate(playerPrefab, transform);
         }
-        Debug.Log("This = " + this + " / Instance = " + (Instance==null));
-        if (Instance == null) {
+        Debug.Log("This = " + this + " / Instance = " + (Instance == null));
+        if (Instance == null)
+        {
             Instance = this;
+            initialSpawn = transform.position;
             currentRespawn = initialSpawn;
             Debug.Log("CurrentRespawn = " + Instance.currentRespawn);
             DontDestroyOnLoad(gameObject);
         }
-        else if (Instance != this) {
+        else if (Instance != this)
+        {
             //Does this when entering a new level, updates spawns and self position
             Debug.Log("New GM found, updating...");
             Instance.updateInitialSpawn(transform.position);
@@ -38,17 +44,17 @@ public class GameMaster : MonoBehaviour {
             Instance.transform.position = transform.position;
             if (Instance.player != null)
                 Instance.player.transform.localPosition = Vector3.zero;
-            
+
             Destroy(gameObject);
         }
-        
-        
-        
-        
+
+
+
+
     }
-	
-	
-	void Update () {
+
+    void Update()
+    {
         Vector2 playerPosition = player.transform.position;
 
         if (playerPosition.y < minYValue)
@@ -57,7 +63,7 @@ public class GameMaster : MonoBehaviour {
             goToCurrentSpawn();
         }
 
-	}
+    }
 
     private void HUDChecker()
     {
@@ -67,7 +73,7 @@ public class GameMaster : MonoBehaviour {
 
     public void handlePlayerDeath(float seconds)
     {
-        Invoke ("destroyPlayerObject", seconds);
+        Invoke("destroyPlayerObject", seconds);
     }
 
     public void destroyPlayerObject()
@@ -76,7 +82,6 @@ public class GameMaster : MonoBehaviour {
         showGameOver();
     }
 
-    
     public void revivePlayer()
     {
         Debug.Log("Player revived!");
@@ -90,7 +95,8 @@ public class GameMaster : MonoBehaviour {
 
     public bool updateSpawn(int prioritySpawn, Vector3 v)
     {
-        if (prioritySpawn > currentPrioritySpawn){
+        if (prioritySpawn > currentPrioritySpawn)
+        {
             currentPrioritySpawn = prioritySpawn;
             currentRespawn = v;
             Debug.Log("NEW CHECKPOINT");
@@ -130,4 +136,20 @@ public class GameMaster : MonoBehaviour {
         player = newPlayer;
     }
 
+    public void gainCoins(int coins)
+    {
+        if (coins < 0)
+            return;
+        playerCoins += coins;
+        if (HUD_Manager.Instance != null)
+            HUD_Manager.Instance.updateCoins(playerCoins);
+    }
+
+    public void loseCoins(int coins)
+    {
+        if (coins > playerCoins)
+            coins = playerCoins;
+        playerCoins -= coins;
+        HUD_Manager.Instance.updateCoins(playerCoins);
+    }
 }

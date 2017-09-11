@@ -65,7 +65,7 @@ public class Enemy_Controller : MonoBehaviour {
                 Debug.Log("Found player");
                 if ((transform.position.y + cc2d.radius/3) < col.transform.position.y)
                 {
-                    col.gameObject.GetComponent<Player_Controller>().jump();
+                    col.gameObject.GetComponent<Player_Controller>().bounceJump();
                     getKilled();
                 }
                 else
@@ -83,7 +83,7 @@ public class Enemy_Controller : MonoBehaviour {
         Invoke("selfDestroy", 0.5f);
         animator.SetTrigger("Killed");
         float random = Random.value;
-        if (random > 0.1)
+        if (random > 0.05f)
         {
             SoundManager.instance.RandomizeSfx(damagedSound);
         }

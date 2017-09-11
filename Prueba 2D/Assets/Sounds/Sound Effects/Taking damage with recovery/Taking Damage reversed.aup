@@ -1,0 +1,93 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="Taking Damage reversed_data" version="1.3.0" audacityversion="2.1.3" sel0="0.0043537415" sel1="0.0043537415" vpos="0" h="0.0000000000" zoom="689.0625000000" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags/>
+	<wavetrack name="Taking Damage" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="3.162278" pan="0.3">
+		<waveclip offset="0.72058957">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="8331">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000f84.au" len="8331" min="-0.168072" max="0.179295" rms="0.051381"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="0.90950113">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2157">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000961.au" len="2157" min="-0.000122" max="0.000181" rms="0.000021"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="0.95841270">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2157">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000961.au" len="2157" min="-0.000122" max="0.000181" rms="0.000021"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="1.00732426">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2157">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000961.au" len="2157" min="-0.000122" max="0.000181" rms="0.000021"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Taking Damage" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="3.162278" pan="0.3">
+		<waveclip offset="0.72058957">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="8331">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000976.au" len="8331" min="-0.168071" max="0.179305" rms="0.051381"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="0.90950113">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2157">
+				<waveblock start="0">
+					<simpleblockfile filename="e000069b.au" len="2157" min="-0.000122" max="0.000183" rms="0.000021"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="0.95841270">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2157">
+				<waveblock start="0">
+					<simpleblockfile filename="e000069b.au" len="2157" min="-0.000122" max="0.000183" rms="0.000021"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="1.00732426">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="2157">
+				<waveblock start="0">
+					<simpleblockfile filename="e000069b.au" len="2157" min="-0.000122" max="0.000183" rms="0.000021"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Taking Damage" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="3.162278" pan="-0.4">
+		<waveclip offset="0.00555556">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="31533">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000a96.au" len="31533" min="-0.092862" max="0.086775" rms="0.027404"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Taking Damage" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="3.162278" pan="-0.4">
+		<waveclip offset="0.00555556">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="31533">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000399.au" len="31533" min="-0.093814" max="0.086777" rms="0.027404"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

@@ -10,6 +10,8 @@ public class Player_Controller : MonoBehaviour {
     public float maxSpeed = 5f;
     public float speed = 20f;
     public float jumpPower = 9.25f;
+    public float maxJumpPower = 18f;
+    public float bounceJumpMultiplier = 1.5f;
     public int maxJumps = 2;
     public bool grounded;
     public AudioClip damagedSound;
@@ -22,6 +24,7 @@ public class Player_Controller : MonoBehaviour {
     private Animator anim;
     private SpriteRenderer sprite;
 
+   
     private bool keyJump;
     private int initialJumpBugFixFrames = 5;
     private int currentJumpBugFixFrame  = 0;
@@ -108,8 +111,19 @@ public class Player_Controller : MonoBehaviour {
         jump(jumpPower);
     }
 
+    public void bounceJump()
+    {
+        float newJumpPower = rb2d.velocity.y * bounceJumpMultiplier * -1;
+        if (newJumpPower < jumpPower)
+            newJumpPower = jumpPower;
+        jump(newJumpPower);
+        jumpNumber = 0;
+    }
+
     public void jump(float jumpPowerMod) {
         rb2d.velocity = new Vector2(rb2d.velocity.x, 0); //reseteo Vel en y para evitar bug en plataforma medium
+        if (jumpPowerMod > maxJumpPower)
+            jumpPowerMod = maxJumpPower;
         rb2d.AddForce(Vector2.up * jumpPowerMod, ForceMode2D.Impulse);
         keyJump = false;
         if (jumpNumber==1)
