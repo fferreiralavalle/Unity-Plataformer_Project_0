@@ -49,7 +49,7 @@ public class Player_Controller : MonoBehaviour {
     // para inputs
     public void Update() {
         checkIfDead();
-        if (!isDead)
+        if (!isDead && !hasFallen)
         {
             anim.SetFloat("Speed", Mathf.Abs(rb2d.velocity.x));
             anim.SetBool("Grounded", grounded);

@@ -9,13 +9,12 @@ public class MyLevelManager : MonoBehaviour {
     {
         Scene activeScene = SceneManager.GetActiveScene();
         Debug.Log("Scene = " + activeScene.name);
-        //GameMaster.Instance.getPlayer().transform.position = new Vector3(0, 5);
-        print("PROBLEM MAY BE HERE");
         GameMaster.Instance.updateInitialCoins();
         switch (activeScene.name)
         {
             case "Level_002":
                 SceneManager.LoadScene("Level_003");
+                SoundManager.instance.playMusicByIndex(1);
                 break ;
             default:
                 SceneManager.LoadScene("level_001");

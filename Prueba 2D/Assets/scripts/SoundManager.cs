@@ -17,6 +17,8 @@ public class SoundManager : MonoBehaviour {
 
     public float minY = -15f;
 
+    public AudioClip[] songList;
+
     private Vector2 velocity;
 
     void Awake () {
@@ -31,32 +33,7 @@ public class SoundManager : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
 	}
-    /*
-    void FixedUpdate()
-    {
-        float posX = Mathf.SmoothDamp(
-            transform.position.x,
-            target.transform.position.x,
-            ref velocity.x,
-            smoothTimeX
-            );
 
-        float posY = Mathf.SmoothDamp(
-            transform.position.y,
-            target.transform.position.y,
-            ref velocity.y,
-            smoothTimeY
-            );
-        if (posY < minY)
-            posY = minY;
-
-        transform.position = new Vector3(
-            posX,
-            posY,
-            0
-            );
-    }
-    */
     public void PlaySingle (AudioClip clip)
     {
         efxSource.clip = clip;
@@ -89,5 +66,21 @@ public class SoundManager : MonoBehaviour {
     public void stopVoice()
     {
         voiceSound.Stop();
+    }
+
+    public void playMusicByIndex(int index)
+    {
+        musicSource.clip = songList[index];
+        musicSource.Play();
+    }
+
+    public void pauseMusic()
+    {
+        musicSource.Pause();
+    }
+
+    public void playCurrentMusic()
+    {
+        musicSource.UnPause();
     }
 }
