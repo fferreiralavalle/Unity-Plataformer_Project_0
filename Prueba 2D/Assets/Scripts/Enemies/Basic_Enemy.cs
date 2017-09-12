@@ -5,6 +5,7 @@ using UnityEngine;
 public class Basic_Enemy : MonoBehaviour {
 
     public float damageDealt = 1;
+    public float maxHealth = 1;
     public float recoveryTimeInSeconds = 4f;
     public AudioClip attackSound;
     public AudioClip hurtSound;
@@ -12,6 +13,7 @@ public class Basic_Enemy : MonoBehaviour {
 
     protected bool isDead = false;
     protected bool isRecoverying = false;
+    protected float currentHealth = 1;
     protected AudioSource audioSource;
 
     public void playDeathAnim()
@@ -86,4 +88,36 @@ public class Basic_Enemy : MonoBehaviour {
         audioSource.PlayDelayed(delay);
     }
     
+    public bool isStomped(Collider2D col)
+    {
+        CircleCollider2D damageCollider = transform.Find("Damage_Collider").GetComponent<CircleCollider2D>();
+        return ( (transform.position.y + damageCollider.offset.y * 1.5f - damageCollider.radius * 0.5f) < col.transform.position.y );
+    }
+
+    public virtual void handlePlayerCollision(Collider2D col)
+    {
+        if (!isDead)
+        {
+            CircleCollider2D damageCollider = transform.Find("Damage_Collider").GetComponent<CircleCollider2D>();
+            if (col.gameObject.tag == "Player")
+            {
+                Debug.Log("Found player");
+                if (isStomped(col))
+                {
+                    col.gameObject.GetComponent<Player_Controller>().bounceJump();
+                    getStomped();
+                }
+                else if (!isRecoverying)
+                {
+                    col.gameObject.GetComponent<Player_Controller>().knockBack(transform.position.x);
+                    col.gameObject.GetComponent<Player_Controller>().takeDamage(damageDealt);
+                }
+            }
+        }
+    }
+
+    public virtual void getStomped()
+    {
+        Destroy(gameObject);
+    }
 }

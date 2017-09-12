@@ -9,16 +9,17 @@ public class Horizontal_Line : Basic_Movement {
     public float waveCicleTime = 4f;
     public Vector2 waveIntensity = new Vector2(0,0);
     public bool isSpriteLookingLeft = false;
-
+    public bool makeSpriteLookLeft = false;
 
     private int direction = 1;
     private int waveDirection = 1;
 
-    void Awake () {
+    void Awake()
+    {
         rb2d = GetComponent<Rigidbody2D>();
         InvokeRepeating("turnBack", walkUntilTurnTime, walkUntilTurnTime);
         InvokeRepeating("waveBack", waveCicleTime, waveCicleTime);
-        if (isSpriteLookingLeft)
+        if (isSpriteLookingLeft ^ makeSpriteLookLeft)
         {
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
         }
