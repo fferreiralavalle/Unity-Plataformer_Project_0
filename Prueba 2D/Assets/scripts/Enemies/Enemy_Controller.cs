@@ -83,7 +83,7 @@ public class Enemy_Controller : MonoBehaviour {
         Invoke("selfDestroy", 0.5f);
         animator.SetTrigger("Killed");
         float random = Random.value;
-        if (random > 0.05f)
+        if (random > 0.03f)
         {
             SoundManager.instance.RandomizeSfx(damagedSound);
         }

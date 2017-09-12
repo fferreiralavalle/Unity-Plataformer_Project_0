@@ -69,10 +69,6 @@ public class Player_Controller : MonoBehaviour {
                     keyJump = true;
                 }
             }
-            if (transform.position.y < -30)
-            {
-                transform.position = Vector2.zero;
-            }
         }
 
     }
@@ -215,7 +211,7 @@ public class Player_Controller : MonoBehaviour {
 
     private void playDeathSound()
     {
-        if (Random.value > 0.20)
+        if (Random.value > 0.05)
         {
             SoundManager.instance.PlaySingle(killedSound);
         }
@@ -241,12 +237,16 @@ public class Player_Controller : MonoBehaviour {
     {
         hasFallen = true;
         playFallingAnimAndSound();
-        Invoke("setHasFallenToFalse", 1.5f);
     }
 
     public void setHasFallenToFalse()
     {
         hasFallen = false;
+    }
+
+    public void setHasFallenToFalseAfterXSeconds(float seconds)
+    {
+        Invoke("setHasFallenToFalse", seconds);
     }
 
     public void playFallingAnimAndSound()

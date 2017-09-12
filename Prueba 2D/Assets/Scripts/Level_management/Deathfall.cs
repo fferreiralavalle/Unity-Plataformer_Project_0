@@ -6,10 +6,11 @@ public class Deathfall : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        print("Entered coll with " + col.gameObject.name);
         if (col.tag == "Player")
         {
-            GameObject player = col.gameObject;
-            player.GetComponent<Player_Controller>().takeFallDamage(1);
+            if (!col.gameObject.GetComponent<Player_Controller>().hasPlayerFell())
+                GameMaster.Instance.handlePlayerFallToDeath();
         }
     }
 }

@@ -17,6 +17,7 @@ public class GameMaster : MonoBehaviour
     private Vector3 currentRespawn;
     private GameObject player { get; set; }
     private int playerCoins = 0;
+    private int playerCoinsAtLevelStart = 0;
 
     void Awake()
     {
@@ -44,12 +45,10 @@ public class GameMaster : MonoBehaviour
             Instance.transform.position = transform.position;
             if (Instance.player != null)
                 Instance.player.transform.localPosition = Vector3.zero;
-
+            //Updates initial level coins to current coins
+            updateInitialCoins();
             Destroy(gameObject);
         }
-
-
-
 
     }
 
@@ -59,21 +58,22 @@ public class GameMaster : MonoBehaviour
 
         if (playerPosition.y < minYValue)
         {
-            player.GetComponent<Player_Controller>().takeFallDamage(1);
-            goToCurrentSpawn();
+            handlePlayerFallToDeath();
         }
-
-    }
-
-    private void HUDChecker()
-    {
-        Player_Controller pc = player.GetComponent<Player_Controller>();
 
     }
 
     public void handlePlayerDeath(float seconds)
     {
         Invoke("destroyPlayerObject", seconds);
+    }
+
+    public void handlePlayerFallToDeath()
+    {
+        player.GetComponent<Player_Controller>().fallToDeath();
+        player.GetComponent<Player_Controller>().takeFallDamage(1);
+        player.GetComponent<Player_Controller>().setHasFallenToFalseAfterXSeconds(2f);
+        Invoke("goToCurrentSpawn", 2f);
     }
 
     public void destroyPlayerObject()
@@ -90,6 +90,7 @@ public class GameMaster : MonoBehaviour
 
     public void resetLevel()
     {
+        setCoinsTo(playerCoinsAtLevelStart);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -151,5 +152,17 @@ public class GameMaster : MonoBehaviour
             coins = playerCoins;
         playerCoins -= coins;
         HUD_Manager.Instance.updateCoins(playerCoins);
+    }
+
+    public void setCoinsTo(int coins)
+    {
+        playerCoins = coins;
+        if (HUD_Manager.Instance != null)
+            HUD_Manager.Instance.updateCoins(playerCoins);
+    }
+
+    public void updateInitialCoins()
+    {
+        playerCoinsAtLevelStart = playerCoins;
     }
 }

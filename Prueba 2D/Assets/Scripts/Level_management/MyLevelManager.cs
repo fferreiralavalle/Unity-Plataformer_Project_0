@@ -9,7 +9,9 @@ public class MyLevelManager : MonoBehaviour {
     {
         Scene activeScene = SceneManager.GetActiveScene();
         Debug.Log("Scene = " + activeScene.name);
-        GameMaster.Instance.getPlayer().transform.position = new Vector3(0, 5);
+        //GameMaster.Instance.getPlayer().transform.position = new Vector3(0, 5);
+        print("PROBLEM MAY BE HERE");
+        GameMaster.Instance.updateInitialCoins();
         switch (activeScene.name)
         {
             case "Level_002":

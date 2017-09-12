@@ -51,7 +51,7 @@ public class HUD_Manager : MonoBehaviour {
         } 
     }
 
-    public void updateCoins(float newCoins)
+    public void updateCoins(int newCoins)
     {
         Text number = coinsPanel.GetComponentInChildren<Text>();
         int previousCoins = int.Parse(number.text);
