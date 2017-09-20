@@ -11,32 +11,6 @@ public class MyLevelManager : MonoBehaviour{
     private string previousLevelName ="";
     public bool levelFinishedLoading = false;
 
-    public void goToNextlevel()
-    {
-        Scene activeScene = SceneManager.GetActiveScene();
-        Debug.Log("Scene = " + activeScene.name);
-        GameMaster.Instance.updateInitialCoins();
-        switch (activeScene.name)
-        {
-            case "Level_002":
-                asyncLevelLoad = SceneManager.LoadSceneAsync("Next_Level_Screen");
-                loadingLevelName = "Next_Level_Screen";
-                break ;
-            default:
-                asyncLevelLoad = SceneManager.LoadSceneAsync("level_001");
-                loadingLevelName = "level_001";
-                break;
-
-        }
-        asyncLevelLoad.allowSceneActivation = false;
-        while (asyncLevelLoad.progress <= 0.89f)
-        {
-            print("Loading... " + asyncLevelLoad.progress * 100 + "%");
-        }
-        asyncLevelLoad.allowSceneActivation = true;
-        SoundManager.instance.playMusicByIndex(getLevelMusicIndexByLevelName(loadingLevelName));
-    }
-
     public int getLevelMusicIndexByLevelName(string levelName)
     {
         switch (levelName)
