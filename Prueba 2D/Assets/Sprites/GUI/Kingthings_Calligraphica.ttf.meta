@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 7f4fe8206e60a2541b2acd1940b595cd
+timeCreated: 1505840708
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Kingthings Calligraphica
+  fontNames:
+  - Kingthings Calligraphica
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5c366876ae2f6574f942cd03913ff2a8, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

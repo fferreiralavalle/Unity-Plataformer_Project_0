@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 92ba1351a32489f438fe0a5e0e258fcc
+timeCreated: 1505840708
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Kingthings Calligraphica Light
+  fontNames:
+  - Kingthings Calligraphica Light
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3ce4961425d650e42a4222d73f437545, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -165,4 +165,45 @@ public class GameMaster : MonoBehaviour
     {
         playerCoinsAtLevelStart = playerCoins;
     }
+
+    public void goToNextLevelScreen()
+    {
+        StartCoroutine(goToNextLevelCoroutine());
+    }
+
+    public IEnumerator goToNextLevelCoroutine()
+    {
+        StartCoroutine(GetComponent<MyLevelManager>().goToNextLevelScreen());
+        HUD_Manager.Instance.fadeOut();
+        yield return new WaitUntil(() => GetComponent<MyLevelManager>().isLevelLoaded());
+        HUD_Manager.Instance.fadeIn();
+        HUD_Manager.Instance.showNextLevelPanel(playerCoins);
+        HUD_Manager.Instance.hidePlayerHealth();
+        HUD_Manager.Instance.hideCoins();
+        player.SetActive(false);
+    }
+
+    public void beginNextLevel()
+    {
+        StartCoroutine(beginNextLevelCoroutine());
+    }
+
+    public IEnumerator beginNextLevelCoroutine()
+    {
+        HUD_Manager.Instance.showPlayerHealth();
+        HUD_Manager.Instance.showCoins();
+        HUD_Manager.Instance.fadeOut();
+        updateInitialCoins();
+
+        string nextLevelName = GetComponent<MyLevelManager>().getNextLevelNameFromLevelName(GetComponent<MyLevelManager>().getPreviousLevelName());
+        StartCoroutine(GetComponent<MyLevelManager>().goToLevelAfterXSeconds(nextLevelName, 5f));
+        yield return new WaitUntil(() => GetComponent<MyLevelManager>().isLevelLoaded());
+        HUD_Manager.Instance.fadeIn();
+        HUD_Manager.Instance.hideNextLevelPanel();
+        player.SetActive(true);
+    }
+
+
+
+
 }

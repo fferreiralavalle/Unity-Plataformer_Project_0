@@ -13,7 +13,7 @@ public class HUD_Manager : MonoBehaviour {
     public GameObject healthPanel;
     public GameObject coinsPanel;
     public GameObject dialogueBox;
-    public GameObject winLevelPanel;
+    public GameObject nextLevelPanel;
 
     public float hatSize = 1;
     public float hatVerticalSeparation = 30;
@@ -27,6 +27,7 @@ public class HUD_Manager : MonoBehaviour {
             Instance = this;
             rectTrans = GetComponent<RectTransform>();
             dialogueBox.SetActive(false);
+            nextLevelPanel.SetActive(false);
             DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this){
@@ -64,13 +65,20 @@ public class HUD_Manager : MonoBehaviour {
         GameObject gameOverPanelShown = Instantiate(gameOverPanel, transform, false);
     }
 
-    public void showWinLevelPanel()
+    public void showNextLevelPanel(float coins)
     {
         Debug.Log("Creating game over screen...");
-        GameObject gameOverPanelShown = Instantiate(winLevelPanel, transform, false);
+        Text coinAmount = nextLevelPanel.transform.Find("Stat_Coins").Find("Coins_Collected").GetComponent<Text>();
+        coinAmount.text = ""+coins;
+        nextLevelPanel.SetActive(true);
     }
 
-    public void showDialogueBox()
+    public void hideNextLevelPanel()
+    {
+        nextLevelPanel.SetActive(false);
+    }
+
+        public void showDialogueBox()
     {
         Debug.Log("Showing dialog");
         dialogueBox.SetActive(true);
@@ -80,5 +88,39 @@ public class HUD_Manager : MonoBehaviour {
     {
         Debug.Log("Hiding dialog");
         dialogueBox.SetActive(false);
+    }
+
+    public void showPlayerHealth()
+    {
+        Debug.Log("Showing player health");
+        healthPanel.SetActive(true);
+    }
+
+    public void hidePlayerHealth()
+    {
+        Debug.Log("Hiding player health");
+        healthPanel.SetActive(false);
+    }
+
+    public void showCoins()
+    {
+        Debug.Log("Showing dialog");
+        coinsPanel.SetActive(true);
+    }
+
+    public void hideCoins()
+    {
+        Debug.Log("Hiding dialog");
+        coinsPanel.SetActive(false);
+    }
+
+    public float fadeIn()
+    {
+        return GetComponent<Fading>().beginFade(-1);
+    }
+
+    public float fadeOut()
+    {
+        return GetComponent<Fading>().beginFade(1);
     }
 }

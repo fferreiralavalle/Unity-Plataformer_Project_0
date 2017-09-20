@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 55561336697135944943908ceff1c4bc
+timeCreated: 1505840708
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Kingthings Calligraphica Italic
+  fontNames:
+  - Kingthings Calligraphica Italic
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c70504cdd34de484bb5e178466197c3f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

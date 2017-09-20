@@ -8,7 +8,7 @@ public class Win_Point : MonoBehaviour {
     {
         if(col.tag == "Player")
         {
-            HUD_Manager.Instance.showWinLevelPanel();
+            GameMaster.Instance.goToNextLevelScreen();
         }
     }
 }
