@@ -8,7 +8,6 @@ public class Horizontal_Line : Basic_Movement {
     public Vector2 speed = new Vector2(1, 0);
     public float waveCicleTime = 4f;
     public Vector2 waveIntensity = new Vector2(0,0);
-    public bool isSpriteLookingLeft = false;
     public bool makeSpriteLookLeft = false;
 
     private int direction = 1;

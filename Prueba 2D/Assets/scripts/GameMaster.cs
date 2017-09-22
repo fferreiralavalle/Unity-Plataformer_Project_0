@@ -171,11 +171,17 @@ public class GameMaster : MonoBehaviour
         StartCoroutine(goToNextLevelCoroutine());
     }
 
-    public IEnumerator goToNextLevelCoroutine()
+    private IEnumerator goToNextLevelCoroutine()
     {
         StartCoroutine(GetComponent<MyLevelManager>().goToNextLevelScreen());
         HUD_Manager.Instance.fadeOut();
+        SoundManager.instance.fadeOutMusic();
+        player.GetComponent<Player_Controller>().animPlayWinPose();
+        player.GetComponent<Player_Controller>().disableMovement();
+
         yield return new WaitUntil(() => GetComponent<MyLevelManager>().isLevelLoaded());
+
+        SoundManager.instance.fadeInMusic();
         HUD_Manager.Instance.fadeIn();
         HUD_Manager.Instance.showNextLevelPanel(playerCoins);
         HUD_Manager.Instance.hidePlayerHealth();
@@ -188,22 +194,30 @@ public class GameMaster : MonoBehaviour
         StartCoroutine(beginNextLevelCoroutine());
     }
 
-    public IEnumerator beginNextLevelCoroutine()
+    private IEnumerator beginNextLevelCoroutine()
     {
         HUD_Manager.Instance.showPlayerHealth();
         HUD_Manager.Instance.showCoins();
         HUD_Manager.Instance.fadeOut();
+        SoundManager.instance.fadeOutMusic();
         updateInitialCoins();
 
         string nextLevelName = GetComponent<MyLevelManager>().getNextLevelNameFromLevelName(GetComponent<MyLevelManager>().getPreviousLevelName());
         StartCoroutine(GetComponent<MyLevelManager>().goToLevelAfterXSeconds(nextLevelName, 5f));
         yield return new WaitUntil(() => GetComponent<MyLevelManager>().isLevelLoaded());
+
+        SoundManager.instance.setMusicVolumeToStandar();
         HUD_Manager.Instance.fadeIn();
         HUD_Manager.Instance.hideNextLevelPanel();
         player.SetActive(true);
+        player.GetComponent<Player_Controller>().animPlayDefault();
+        player.GetComponent<Player_Controller>().enableMovement();
     }
 
-
+    public void restorePlayerHealth(float healthRestored)
+    {
+        player.GetComponent<Player_Controller>().restoreHealth(healthRestored);
+    }
 
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour {
 
-    public float initialHealth = 3;
+    public float maxHealth = 3;
     public float armor = 0;
 
     public float maxSpeed = 5f;
@@ -18,6 +18,7 @@ public class Player_Controller : MonoBehaviour {
     public AudioClip killedSound;
     public AudioClip secretKilledSound;
     public AudioClip fallToDeathSound;
+    public AudioClip restoreHealthSound;
 
     private int jumpNumber;
 
@@ -41,7 +42,7 @@ public class Player_Controller : MonoBehaviour {
         sprite = GetComponent<SpriteRenderer>();
         HUD_Manager.Instance.updateLifes(health);
         jumpNumber = 0;
-        health = initialHealth;
+        health = maxHealth;
 
         DontDestroyOnLoad(gameObject);
     }
@@ -178,14 +179,20 @@ public class Player_Controller : MonoBehaviour {
     }
 
     public void animPlayRegularDamage() {
-        animPlayRegularDamage(3f);
-    }
-
-    public void animPlayRegularDamage(float seconds) {
         anim.SetTrigger("TakeDamage");
     }
 
-    public void checkIfDead()
+    public void animPlayWinPose()
+    {
+        anim.SetTrigger("WinPose");
+    }
+
+    public void animPlayDefault()
+    {
+        anim.SetTrigger("Default");
+    }
+
+        public void checkIfDead()
     {
         if (health <= 0 && !isDead)
         {
@@ -229,8 +236,9 @@ public class Player_Controller : MonoBehaviour {
     public void revive()
     {
         isDead = false;
-        health = initialHealth;
-        anim.SetTrigger("Revive");
+        health = maxHealth;
+        HUD_Manager.Instance.updateLifes(health);
+        animPlayDefault();
     }
     
     public void fallToDeath()
@@ -257,5 +265,16 @@ public class Player_Controller : MonoBehaviour {
     public bool hasPlayerFell()
     {
         return hasFallen;
+    }
+
+    public float restoreHealth(float healthRestored)
+    {
+        float previousHealth = health;
+        health += healthRestored;
+        health = Mathf.Clamp(health, 0, maxHealth);
+        //returns actual health restored after clamping to its maximum.
+        SoundManager.instance.RandomizeSfx(restoreHealthSound);
+        HUD_Manager.Instance.updateLifes(health);
+        return (health - previousHealth);
     }
 }

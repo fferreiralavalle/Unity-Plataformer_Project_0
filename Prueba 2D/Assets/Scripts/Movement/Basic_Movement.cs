@@ -5,6 +5,7 @@ using UnityEngine;
 public class Basic_Movement : MonoBehaviour {
 
     protected bool allowMovement = true;
+    public bool isSpriteLookingLeft = false;
     protected Rigidbody2D rb2d;
 
     private void Start()

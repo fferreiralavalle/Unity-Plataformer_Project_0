@@ -10,13 +10,23 @@ public class ShootOverTime : Basic_Enemy
     public Vector2 bulletSpeed = new Vector2(-1, 0);
     public Vector2 bulletOffSet = Vector2.zero;
 
+
     void Start()
     {
         InvokeRepeating("shoot", timeBetweenBullets, timeBetweenBullets);
+
     }
 
     public void shoot()
     {
+        int spriteReversedMofifier = 1;
+        if (GetComponent<Basic_Movement>() != null && GetComponent<Basic_Movement>().isSpriteLookingLeft)
+        {
+            print("Shooter name = " + gameObject.name + " Basic movement != null?" + (GetComponent<Basic_Movement>() != null));
+            print("Shooter name = " + gameObject.name + " isSpriteLookingLeft?" + (GetComponent<Basic_Movement>().isSpriteLookingLeft));
+            spriteReversedMofifier = -1;
+        }
+            
         playSoundRandomized(attackSound);
         GameObject newBullet = Instantiate(bullet, null, true);
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -24,7 +34,7 @@ public class ShootOverTime : Basic_Enemy
             spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         newBullet.GetComponent<LinearInfinite>().speed = new Vector2
             (
-            bulletSpeed.x,
+            bulletSpeed.x * Mathf.Sign(transform.localScale.x),
             bulletSpeed.y
             );
         print("bullet yssign is = " + Mathf.Sign(bulletSpeed.y));
@@ -37,7 +47,7 @@ public class ShootOverTime : Basic_Enemy
         newBullet.transform.localScale = new Vector3
             (
             newBullet.transform.localScale.x,
-            Mathf.Abs(newBullet.transform.localScale.y) * Mathf.Sign(transform.localScale.x) * Mathf.Sign(bulletSpeed.x),
+            Mathf.Abs(newBullet.transform.localScale.y) * Mathf.Sign(transform.localScale.x) * Mathf.Sign(bulletSpeed.x) ,
             newBullet.transform.localScale.z
             );
     }
