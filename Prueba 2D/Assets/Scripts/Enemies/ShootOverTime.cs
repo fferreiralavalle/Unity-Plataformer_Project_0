@@ -7,13 +7,14 @@ public class ShootOverTime : Basic_Enemy
 
     public GameObject bullet;
     public float timeBetweenBullets = 4f;
+    public float InitialShootingDelay = 0;
     public Vector2 bulletSpeed = new Vector2(-1, 0);
     public Vector2 bulletOffSet = Vector2.zero;
 
 
     void Start()
     {
-        InvokeRepeating("shoot", timeBetweenBullets, timeBetweenBullets);
+        startShooting();
 
     }
 
@@ -22,8 +23,6 @@ public class ShootOverTime : Basic_Enemy
         int spriteReversedMofifier = 1;
         if (GetComponent<Basic_Movement>() != null && GetComponent<Basic_Movement>().isSpriteLookingLeft)
         {
-            print("Shooter name = " + gameObject.name + " Basic movement != null?" + (GetComponent<Basic_Movement>() != null));
-            print("Shooter name = " + gameObject.name + " isSpriteLookingLeft?" + (GetComponent<Basic_Movement>().isSpriteLookingLeft));
             spriteReversedMofifier = -1;
         }
             
@@ -37,7 +36,7 @@ public class ShootOverTime : Basic_Enemy
             bulletSpeed.x * Mathf.Sign(transform.localScale.x),
             bulletSpeed.y
             );
-        print("bullet yssign is = " + Mathf.Sign(bulletSpeed.y));
+
         newBullet.transform.position = new Vector3
             (
             transform.position.x + bulletOffSet.x ,
@@ -59,6 +58,6 @@ public class ShootOverTime : Basic_Enemy
 
     public void startShooting()
     {
-        InvokeRepeating("shoot", timeBetweenBullets, timeBetweenBullets);
+        InvokeRepeating("shoot", timeBetweenBullets + InitialShootingDelay, timeBetweenBullets);
     }
 }

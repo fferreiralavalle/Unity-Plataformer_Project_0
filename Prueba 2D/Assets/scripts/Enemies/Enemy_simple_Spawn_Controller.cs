@@ -9,6 +9,7 @@ public class Enemy_simple_Spawn_Controller : MonoBehaviour {
     public AudioClip spawnDownSound;
 
     public float spawnTime = 4f;            // How long between each spawn.
+    public float initialDelay = 0f;
     //public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
 
     private AudioSource audioSource;
@@ -17,8 +18,8 @@ public class Enemy_simple_Spawn_Controller : MonoBehaviour {
     void Start()
     {
         // Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
-        InvokeRepeating("Spawn", spawnTime, spawnTime);
-        InvokeRepeating("spawnAnimation", spawnTime -1, spawnTime);
+        InvokeRepeating("Spawn", initialDelay + spawnTime, spawnTime);
+        InvokeRepeating("spawnAnimation", initialDelay + spawnTime -1, spawnTime);
         audioSource = GetComponent<AudioSource>();
     }
 

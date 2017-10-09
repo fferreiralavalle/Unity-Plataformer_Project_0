@@ -13,9 +13,12 @@ public class GameMaster : MonoBehaviour
     public GameObject HUD;
     public Vector2 initialSpawn = Vector2.zero;
     public int currentPrioritySpawn = 0;
+    public int playerMaxLifes = 3;
 
     private Vector3 currentRespawn;
     private GameObject player { get; set; }
+
+    private int playerLifes = 3;
     private int playerCoins = 0;
     private int playerCoinsAtLevelStart = 0;
 
@@ -25,6 +28,7 @@ public class GameMaster : MonoBehaviour
         if (player == null && playerPrefab != null)
         {
             player = Instantiate(playerPrefab, transform);
+            print("player born");
         }
         Debug.Log("This = " + this + " / Instance = " + (Instance == null));
         if (Instance == null)
@@ -32,6 +36,7 @@ public class GameMaster : MonoBehaviour
             Instance = this;
             initialSpawn = transform.position;
             currentRespawn = initialSpawn;
+            playerLifes = playerMaxLifes;
             Debug.Log("CurrentRespawn = " + Instance.currentRespawn);
             DontDestroyOnLoad(gameObject);
         }
@@ -51,7 +56,11 @@ public class GameMaster : MonoBehaviour
         }
 
     }
-
+    private void Start()
+    {
+        HUD_Manager.Instance.updateMaxHealth(player.GetComponent<Player_Controller>().maxHealth);
+        HUD_Manager.Instance.updateLife(playerLifes);
+    }
     void Update()
     {
         Vector2 playerPosition = player.transform.position;
@@ -65,15 +74,31 @@ public class GameMaster : MonoBehaviour
 
     public void handlePlayerDeath(float seconds)
     {
-        Invoke("destroyPlayerObject", seconds);
+        playerLifes--;
+        if (playerLifes > 0)
+        {
+            HUD_Manager.Instance.updateLife(playerLifes);
+            Invoke("revivePlayer", seconds);
+            Invoke("goToCurrentSpawn", seconds);
+        }
+        else
+        {
+            Invoke("destroyPlayerObject", seconds);
+        }
+
+
     }
 
     public void handlePlayerFallToDeath()
     {
-        player.GetComponent<Player_Controller>().fallToDeath();
-        player.GetComponent<Player_Controller>().takeFallDamage(1);
-        player.GetComponent<Player_Controller>().setHasFallenToFalseAfterXSeconds(2f);
-        Invoke("goToCurrentSpawn", 2f);
+        if (!player.GetComponent<Player_Controller>().hasPlayerFell())
+        {
+            player.GetComponent<Player_Controller>().fallToDeath();
+            player.GetComponent<Player_Controller>().takeFallDamage(1);
+            player.GetComponent<Player_Controller>().setHasFallenToFalseAfterXSeconds(2f);
+            Invoke("goToCurrentSpawn", 1.9f);
+        }
+
     }
 
     public void destroyPlayerObject()
@@ -91,6 +116,7 @@ public class GameMaster : MonoBehaviour
     public void resetLevel()
     {
         setCoinsTo(playerCoinsAtLevelStart);
+        resetLifes();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -166,6 +192,25 @@ public class GameMaster : MonoBehaviour
         playerCoinsAtLevelStart = playerCoins;
     }
 
+    public void resetLifes()
+    {
+        playerLifes = playerMaxLifes;
+        HUD_Manager.Instance.updateLife(playerLifes);
+    }
+
+    public void recoverMissingLifes()
+    {
+        if (playerLifes < playerMaxLifes)
+        {
+            resetLifes();
+        }
+    }
+
+    public void recoverMissingHealth()
+    {
+        restorePlayerHealth(player.GetComponent<Player_Controller>().maxHealth);
+    }
+
     public void goToNextLevelScreen()
     {
         StartCoroutine(goToNextLevelCoroutine());
@@ -184,8 +229,7 @@ public class GameMaster : MonoBehaviour
         SoundManager.instance.fadeInMusic();
         HUD_Manager.Instance.fadeIn();
         HUD_Manager.Instance.showNextLevelPanel(playerCoins);
-        HUD_Manager.Instance.hidePlayerHealth();
-        HUD_Manager.Instance.hideCoins();
+        HUD_Manager.Instance.hideAll();
         player.SetActive(false);
     }
 
@@ -196,8 +240,6 @@ public class GameMaster : MonoBehaviour
 
     private IEnumerator beginNextLevelCoroutine()
     {
-        HUD_Manager.Instance.showPlayerHealth();
-        HUD_Manager.Instance.showCoins();
         HUD_Manager.Instance.fadeOut();
         SoundManager.instance.fadeOutMusic();
         updateInitialCoins();
@@ -209,7 +251,10 @@ public class GameMaster : MonoBehaviour
         SoundManager.instance.setMusicVolumeToStandar();
         HUD_Manager.Instance.fadeIn();
         HUD_Manager.Instance.hideNextLevelPanel();
+        HUD_Manager.Instance.showAll();
         player.SetActive(true);
+        recoverMissingHealth();
+        recoverMissingLifes();
         player.GetComponent<Player_Controller>().animPlayDefault();
         player.GetComponent<Player_Controller>().enableMovement();
     }

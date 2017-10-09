@@ -32,6 +32,8 @@ public class MyLevelManager : MonoBehaviour{
         {
             case "Level_002":
                 return "Level_003";
+            case "Level_003":
+                return "Level_Boss_Slime";
             default:
                 return "Level_001";
 

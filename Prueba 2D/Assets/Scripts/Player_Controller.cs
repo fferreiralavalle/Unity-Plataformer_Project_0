@@ -40,7 +40,7 @@ public class Player_Controller : MonoBehaviour {
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
-        HUD_Manager.Instance.updateLifes(health);
+        HUD_Manager.Instance.updateHealth(health);
         jumpNumber = 0;
         health = maxHealth;
 
@@ -165,7 +165,7 @@ public class Player_Controller : MonoBehaviour {
             float trueDamageDealt = damage / (armor + 1);
             health -= trueDamageDealt;
 
-            HUD_Manager.Instance.updateLifes(health);
+            HUD_Manager.Instance.updateHealth(health);
             SoundManager.instance.PlaySingle(damagedSound);
             return trueDamageDealt;
         }
@@ -174,7 +174,7 @@ public class Player_Controller : MonoBehaviour {
 
     public float takeFallDamage(float damage) {
         health -= damage;
-        HUD_Manager.Instance.updateLifes(health);
+        HUD_Manager.Instance.updateHealth(health);
         return damage;
     }
 
@@ -192,7 +192,7 @@ public class Player_Controller : MonoBehaviour {
         anim.SetTrigger("Default");
     }
 
-        public void checkIfDead()
+    public void checkIfDead()
     {
         if (health <= 0 && !isDead)
         {
@@ -237,7 +237,7 @@ public class Player_Controller : MonoBehaviour {
     {
         isDead = false;
         health = maxHealth;
-        HUD_Manager.Instance.updateLifes(health);
+        HUD_Manager.Instance.updateHealth(health);
         animPlayDefault();
     }
     
@@ -274,7 +274,7 @@ public class Player_Controller : MonoBehaviour {
         health = Mathf.Clamp(health, 0, maxHealth);
         //returns actual health restored after clamping to its maximum.
         SoundManager.instance.RandomizeSfx(restoreHealthSound);
-        HUD_Manager.Instance.updateLifes(health);
+        HUD_Manager.Instance.updateHealth(health);
         return (health - previousHealth);
     }
 }

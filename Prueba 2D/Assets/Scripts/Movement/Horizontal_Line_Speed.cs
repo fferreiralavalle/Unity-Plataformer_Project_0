@@ -38,7 +38,7 @@ public class Horizontal_Line_Speed : Basic_Movement {
             direction *= -1;
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
             //Sets new destiny and adds the over distance to compensate
-            destiny = new Vector3(direction * distance + transform.position.x + currentDistance * -1, transform.position.y);
+            destiny = new Vector3(direction *( distance + currentDistance * -1) + transform.position.x , transform.position.y);
             rb2d.velocity = Vector3.zero;
         }
     }

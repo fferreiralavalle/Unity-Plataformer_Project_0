@@ -8,6 +8,7 @@ public class camara_movement : MonoBehaviour {
     public Vector2 minCamPos, maxCamPos;
     public float yOffSet = 0.3f;
     public float smoothTime;
+    public bool canMove = true;
 
     private Vector2 velocity;
     private bool hasFallen = false;
@@ -24,7 +25,7 @@ public class camara_movement : MonoBehaviour {
 	void FixedUpdate () {
         if (target.tag == "Player")
             hasFallen = target.GetComponent<Player_Controller>().hasPlayerFell();
-        if (!hasFallen)
+        if (!hasFallen && canMove)
         {
             float posX = Mathf.SmoothDamp(
             transform.position.x,

@@ -31,6 +31,24 @@ public class Basic_Enemy : MonoBehaviour {
         GetComponent<Animator>().SetTrigger("Attack");
     }
 
+    public void playSoundRandomized(AudioClip clip)
+    {
+        float randomPitch = Random.Range(0.9f, 1.1f);
+
+        audioSource.pitch = randomPitch;
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void playSoundRandomizedWithDelay(AudioClip clip, float delay)
+    {
+        float randomPitch = Random.Range(0.9f, 1.1f);
+
+        audioSource.pitch = randomPitch;
+        audioSource.clip = clip;
+        audioSource.PlayDelayed(delay);
+    }
+
     public void die()
     {
         Destroy(gameObject);
@@ -70,23 +88,6 @@ public class Basic_Enemy : MonoBehaviour {
     {
         isRecoverying = false;
     }
-
-    public void playSoundRandomized(AudioClip clip)
-    {
-        float randomPitch = Random.Range(0.9f, 1.1f);
-
-        audioSource.pitch = randomPitch;
-        audioSource.clip = clip;
-        audioSource.Play();
-    }
-    public void playSoundRandomizedWithDelay(AudioClip clip, float delay)
-    {
-        float randomPitch = Random.Range(0.9f, 1.1f);
-
-        audioSource.pitch = randomPitch;
-        audioSource.clip = clip;
-        audioSource.PlayDelayed(delay);
-    }
     
     public bool isStomped(Collider2D col)
     {
@@ -119,5 +120,11 @@ public class Basic_Enemy : MonoBehaviour {
     public virtual void getStomped()
     {
         Destroy(gameObject);
+    }
+
+    public void takeDamage(float damage)
+    {
+        currentHealth -= damage;
+        playSoundRandomized(hurtSound);
     }
 }

@@ -10,8 +10,5 @@ public class Revive_Player_From_UI : MonoBehaviour {
         GameMaster.Instance.revivePlayer();
         GameMaster.Instance.goToIntialSpawn();
         Destroy(gameObject);
-        /*
-        GameMaster.Instance.revivePlayer();
-        */
     }
 }

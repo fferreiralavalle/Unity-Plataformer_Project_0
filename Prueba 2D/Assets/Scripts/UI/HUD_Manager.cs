@@ -11,13 +11,13 @@ public class HUD_Manager : MonoBehaviour {
     public Image imgCoin;
     public GameObject gameOverPanel;
     public GameObject healthPanel;
+    public GameObject lifePanel;
     public GameObject coinsPanel;
     public GameObject dialogueBox;
     public GameObject nextLevelPanel;
 
-    public float hatSize = 1;
-    public float hatVerticalSeparation = 30;
     public float hatHorizontalSeparation = 30;
+    public float hatVerticalSeparation = 30;
 
     private RectTransform rectTrans;
 
@@ -29,13 +29,15 @@ public class HUD_Manager : MonoBehaviour {
             dialogueBox.SetActive(false);
             nextLevelPanel.SetActive(false);
             DontDestroyOnLoad(gameObject);
+            
         }
         else if (Instance != this){
             Destroy(gameObject);
         }
+        gameObject.SetActive(true);
     }
 
-    public void updateLifes(float newLifeValue)
+    public void updateHealth(float newHealthValue)
     {
         // Destroys old children
         for (int i = 0; i < healthPanel.transform.childCount; i++)
@@ -44,12 +46,34 @@ public class HUD_Manager : MonoBehaviour {
         }
 
         //Re creates children
-        for (float i =0 ; i < newLifeValue; i++)
+        for (float i =0 ; i < newHealthValue; i++)
         {
             Image lifeHat = Instantiate(imgHat, healthPanel.transform, false);
-            lifeHat.GetComponent<RectTransform>().anchoredPosition = new Vector2( hatVerticalSeparation *(0.5f + i), -hatHorizontalSeparation);
-            
-        } 
+            Vector2 imgHatSize = imgHat.GetComponent<RectTransform>().sizeDelta;
+            Vector2 imgHatScale = imgHat.GetComponent<RectTransform>().localScale;
+            lifeHat.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+                 hatHorizontalSeparation * (1 + i) + imgHatSize.x * imgHatScale.x * (0.5f + i), 
+                -hatVerticalSeparation             - imgHatSize.y * imgHatScale.y / 2);
+        }
+        
+    }
+
+    public void updateMaxHealth(float newMaxHealth)
+    {
+        Vector2 imgHatScale = imgHat.GetComponent<RectTransform>().localScale;
+        Vector2 imgHatSize = imgHat.GetComponent<RectTransform>().sizeDelta;
+        healthPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(
+            imgHatSize.x * imgHatScale.x * newMaxHealth + hatHorizontalSeparation * (2 + newMaxHealth),
+            imgHatSize.y * imgHatScale.y                + hatVerticalSeparation   *  2
+            );
+    }
+
+    public void updateLife(int newLifeValue)
+    {
+        print("new life is = " + newLifeValue);
+        Text number = lifePanel.GetComponentInChildren<Text>();
+        int previousCoins = int.Parse(number.text);
+        number.text = "" + newLifeValue;
     }
 
     public void updateCoins(int newCoins)
@@ -122,5 +146,31 @@ public class HUD_Manager : MonoBehaviour {
     public float fadeOut()
     {
         return GetComponent<Fading>().beginFade(1);
+    }
+
+    public void showLifes()
+    {
+        Debug.Log("Showing dialog");
+        lifePanel.SetActive(true);
+    }
+
+    public void hideLifes()
+    {
+        Debug.Log("Hiding dialog");
+        lifePanel.SetActive(false);
+    }
+
+    public void hideAll()
+    {
+        hidePlayerHealth();
+        hideCoins();
+        hideLifes();
+    }
+
+    public void showAll()
+    {
+        showPlayerHealth();
+        showCoins();
+        showLifes();
     }
 }
