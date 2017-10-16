@@ -66,7 +66,6 @@ public class Player_Controller : MonoBehaviour {
                 if (jumpNumber < maxJumps)
                 {
                     jumpNumber++;
-                    Debug.Log("avalible jumps = "+ (maxJumps - jumpNumber));
                     keyJump = true;
                 }
             }

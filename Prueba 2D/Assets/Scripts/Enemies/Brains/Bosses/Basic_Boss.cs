@@ -18,12 +18,13 @@ public class Basic_Boss : Basic_Enemy {
         hasFightBegun = true;
     }
 
-    public void beginRoutine(int routineNumber) {
+    public Component beginRoutine(int routineNumber) {
         if (gameObject.GetComponent(Type.GetType(routines[routineNumber])) == null)
         {
             gameObject.AddComponent( Type.GetType(routines[routineNumber]) );
             activeRountineIndexes.Add(routineNumber);
         }
+        return gameObject.GetComponent(Type.GetType(routines[routineNumber]));
     }
 
     public void endRoutine(int routineNumber)

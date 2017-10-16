@@ -11,7 +11,6 @@ public class Slimeghter : Basic_Enemy {
 	void Start () {
         audioSource = GetComponent<AudioSource>();
         animator = transform.Find("Sprite").GetComponent<Animator>();
-        print("Component : " + movement);
         cc2d = GetComponent<CircleCollider2D>();
         movement = GetComponent<Basic_Movement>();
     }

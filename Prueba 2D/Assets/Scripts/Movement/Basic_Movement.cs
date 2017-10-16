@@ -21,6 +21,13 @@ public class Basic_Movement : MonoBehaviour {
     public void setAllowMovementToFalse()
     {
         allowMovement = false;
+
+    }
+
+    public void disableMovementAndAllowAfterXSeconds(float seconds)
+    {
+        setAllowMovementToFalse();
+        Invoke("setAllowMovementToTrue", seconds);
     }
 
     public void setSpeedToCero()

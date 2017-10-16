@@ -18,17 +18,28 @@ public class Basic_Enemy : MonoBehaviour {
 
     public void playDeathAnim()
     {
-        GetComponent<Animator>().SetTrigger("Die");
+        if (GetComponent<Animator>() != null)
+            GetComponent<Animator>().SetTrigger("Die");
+        else if (GetComponentInChildren<Animator>() != null)
+            GetComponentInChildren<Animator>().SetTrigger("Die");
     }
 
     public void playRecoverAnim()
     {
-        GetComponent<Animator>().SetTrigger("Recover");
+        if (GetComponent<Animator>()!=null)
+            GetComponent<Animator>().SetTrigger("Recover");
+        else if (GetComponentInChildren<Animator>() != null)
+        {
+            GetComponentInChildren<Animator>().SetTrigger("Recover");
+        }
     }
 
     public void playAttackAnim()
     {
-        GetComponent<Animator>().SetTrigger("Attack");
+        if (GetComponent<Animator>() != null)
+            GetComponent<Animator>().SetTrigger("Attack");
+        else if (GetComponentInChildren<Animator>() != null)
+            GetComponentInChildren<Animator>().SetTrigger("Attack");
     }
 
     public void playSoundRandomized(AudioClip clip)
@@ -122,9 +133,10 @@ public class Basic_Enemy : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    public void takeDamage(float damage)
+    public virtual void takeDamage(float damage)
     {
         currentHealth -= damage;
         playSoundRandomized(hurtSound);
+        print("Entered regular take damage");
     }
 }

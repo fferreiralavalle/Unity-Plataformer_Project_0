@@ -116,6 +116,7 @@ public class GameMaster : MonoBehaviour
     public void resetLevel()
     {
         setCoinsTo(playerCoinsAtLevelStart);
+        resetSpawn();
         resetLifes();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -137,10 +138,9 @@ public class GameMaster : MonoBehaviour
         initialSpawn = v;
     }
 
-    public void showGameOver()
+    public void resetSpawn()
     {
-        Debug.Log("Showing game over");
-        HUD_Manager.Instance.showGameOverPanel();
+        currentPrioritySpawn = 0;
     }
 
     public void goToIntialSpawn()
@@ -151,6 +151,12 @@ public class GameMaster : MonoBehaviour
     public void goToCurrentSpawn()
     {
         player.transform.position = currentRespawn;
+    }
+
+    public void showGameOver()
+    {
+        Debug.Log("Showing game over");
+        HUD_Manager.Instance.showGameOverPanel();
     }
 
     public GameObject getPlayer()
@@ -243,6 +249,7 @@ public class GameMaster : MonoBehaviour
         HUD_Manager.Instance.fadeOut();
         SoundManager.instance.fadeOutMusic();
         updateInitialCoins();
+        resetSpawn();
 
         string nextLevelName = GetComponent<MyLevelManager>().getNextLevelNameFromLevelName(GetComponent<MyLevelManager>().getPreviousLevelName());
         StartCoroutine(GetComponent<MyLevelManager>().goToLevelAfterXSeconds(nextLevelName, 5f));
