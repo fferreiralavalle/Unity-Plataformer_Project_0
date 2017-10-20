@@ -33,7 +33,7 @@ public class Horizontal_Line : Basic_Movement {
             );
         Vector2 finalWaveIntensity = waveIntensity * waveDirection;
         rb2d.velocity = new Vector2(limitedSpeed.x + finalWaveIntensity.x, limitedSpeed.y + finalWaveIntensity.y);
-        
+
     }
 
     public void turnBack()
@@ -45,6 +45,11 @@ public class Horizontal_Line : Basic_Movement {
 
         transform.localScale = new Vector3(transform.localScale.x * scaleX, transform.localScale.y, transform.localScale.z);
         rb2d.velocity = Vector2.zero;
+    }
+
+    public void forceTurnBack()
+    {
+        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
     }
 
     public void waveBack()

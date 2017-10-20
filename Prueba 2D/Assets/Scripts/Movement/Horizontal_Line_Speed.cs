@@ -6,7 +6,6 @@ public class Horizontal_Line_Speed : Basic_Movement {
 
     public float distance = 4f;
     public float speed = 1f;
-    public bool isSpriteLookingLeft = false;
     public bool goLeft = false;
     public bool turnSpriteOnComple = true;
 
@@ -24,7 +23,7 @@ public class Horizontal_Line_Speed : Basic_Movement {
             direction *= -1;
         }
         setDestinityBasedOnCurrentPosition();
-        if (isSpriteLookingLeft)
+        if (isSpriteLookingLeft ^ goLeft)
         {
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
         }

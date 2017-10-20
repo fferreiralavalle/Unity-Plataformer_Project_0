@@ -18,13 +18,14 @@ public class Hop_Routine : Basic_Routine {
 
     void Start()
     {
-        InvokeRepeating("hop", timeBetweenHops, timeBetweenHops + pauseBeforeHop);
+        Invoke("invokeHop", 0.1f);
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
     }
-    void Update () {
-        
-	}
+    void invokeHop()
+    {
+        InvokeRepeating("hop", timeBetweenHops, timeBetweenHops + pauseBeforeHop);
+    }
 
     public void jump()
     {

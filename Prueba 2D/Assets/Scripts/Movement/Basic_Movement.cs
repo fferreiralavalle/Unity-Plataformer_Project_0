@@ -8,7 +8,7 @@ public class Basic_Movement : MonoBehaviour {
     public bool isSpriteLookingLeft = false;
     protected Rigidbody2D rb2d;
 
-    private void Start()
+    private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
     }

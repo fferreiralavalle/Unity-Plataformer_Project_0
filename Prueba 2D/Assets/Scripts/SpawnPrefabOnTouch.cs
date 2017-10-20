@@ -7,6 +7,7 @@ public class SpawnPrefabOnTouch : MonoBehaviour {
     public GameObject prefab;
     public Vector2 offsets = Vector2.zero;
     public bool destroyAfterFirstSpawn = true;
+    public AudioClip onTouchSound;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,6 +15,7 @@ public class SpawnPrefabOnTouch : MonoBehaviour {
         {
             GameObject go = Instantiate(prefab);
             go.transform.position = new Vector2(transform.position.x + offsets.x, transform.position.y + offsets.y);
+            SoundManager.instance.RandomizeSfx(onTouchSound);
             if (destroyAfterFirstSpawn)
                 Destroy(gameObject);
         }

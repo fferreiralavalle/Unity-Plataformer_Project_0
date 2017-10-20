@@ -13,7 +13,7 @@ public class Basic_Boss : Basic_Enemy {
 		
 	}
 
-    public void beginFight()
+    public virtual void beginFight()
     {
         hasFightBegun = true;
     }

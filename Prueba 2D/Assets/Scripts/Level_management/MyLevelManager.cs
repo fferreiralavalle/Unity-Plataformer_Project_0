@@ -21,6 +21,8 @@ public class MyLevelManager : MonoBehaviour{
                 return 1;
             case "Next_Level_Screen":
                 return 2;
+            case "Level_Boss_Slime":
+                return 4;
             default:
                 return 0;
         }

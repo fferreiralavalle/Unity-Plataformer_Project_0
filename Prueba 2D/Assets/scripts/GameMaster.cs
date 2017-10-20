@@ -60,6 +60,7 @@ public class GameMaster : MonoBehaviour
     {
         HUD_Manager.Instance.updateMaxHealth(player.GetComponent<Player_Controller>().maxHealth);
         HUD_Manager.Instance.updateLife(playerLifes);
+        GetComponent<MyLevelManager>().playCurrentLevelMusic();
     }
     void Update()
     {

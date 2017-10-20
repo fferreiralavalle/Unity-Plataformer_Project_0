@@ -8,6 +8,7 @@ public class Big_Slimeghter : Basic_Boss {
     public GameObject slimeghterPrefab;
     public GameObject helpPrefab;
     public GameObject[] bossPlatforms;
+    public GameObject[] BeeSpawners;
     public float timeBetweenHelp = 5f;
     private int direction = -1;
 
@@ -18,24 +19,37 @@ public class Big_Slimeghter : Basic_Boss {
     private Renderer myRenderer;
     private bool tookDamage = false;
     private GameObject help;
+    private bool arePlatformsActive = false;
 
     void Start()
     {
+        currentHealth = maxHealth;
         audioSource = GetComponent<AudioSource>();
         animator = transform.Find("Sprite").GetComponent<Animator>();
-        print("Component : " + movement);
         cc2d = GetComponent<CircleCollider2D>();
         movement = GetComponent<Basic_Movement>();
         rb2d = GetComponent<Rigidbody2D>();
         myRenderer = GetComponentInChildren<Renderer>();
         deactivatePlatforms();
+        movement.setSpeedToCero();
+        movement.enabled = false;
+        
+    }
+
+    public override void beginFight()
+    {
         pickRoutine(0);
-        currentHealth = maxHealth;
+        movement.enabled = true;
     }
 
     void Update () {
         if (currentHealth<= 0)
         {
+            foreach (GameObject go in BeeSpawners)
+            {
+                go.GetComponent<Basic_Spawn>().killAllSpawns();
+            }
+            Destroy(GameObject.Find(gameObject.name + "-Spawns"));
             die();
         }
     }
@@ -44,13 +58,15 @@ public class Big_Slimeghter : Basic_Boss {
     {
         this.routineNumber = routineNumber;
         Hop_Routine hr;
+        print(gameObject.name + " - CurrentHealth=" + currentHealth);
         switch (routineNumber)
         {
             case 0:
                 hr = (Hop_Routine)beginRoutine(0);
                 if (currentHealth <= 2)
                 {
-                    hr.timeBetweenHops = 4f;
+                    hr.timeBetweenHops = 3f;
+                    summonDoubleBees();
                 }
                 else
                 {
@@ -63,10 +79,11 @@ public class Big_Slimeghter : Basic_Boss {
                 ThrowPrefabAway tpa = (ThrowPrefabAway)beginRoutine(1);
                 tpa.prefab = slimeghterPrefab;
                 hr = (Hop_Routine)beginRoutine(0);
-                if (currentHealth<= 1)
+                if (currentHealth<= 2)
                 {
                     hr.timeBetweenHops = 3f;
                     tpa.amount = Mathf.FloorToInt(maxHealth - currentHealth);
+                    summonDoubleBees();
                 }
                 else
                 {
@@ -84,7 +101,7 @@ public class Big_Slimeghter : Basic_Boss {
         if (!isDead)
         {
             CircleCollider2D damageCollider = transform.Find("Damage_Collider").GetComponent<CircleCollider2D>();
-            if (col.gameObject.tag == "Player")
+            if (col.gameObject.tag == "Player" && !tookDamage)
             {
                 Debug.Log("Found player");
                 if ((transform.position.y + damageCollider.offset.y * 1.5f * transform.localScale.y) < col.transform.position.y)
@@ -107,6 +124,7 @@ public class Big_Slimeghter : Basic_Boss {
         foreach (GameObject g in bossPlatforms){
             g.SetActive(true);
         }
+        arePlatformsActive = true;
     }
 
     public void deactivatePlatforms()
@@ -115,6 +133,7 @@ public class Big_Slimeghter : Basic_Boss {
         {
             g.SetActive(false);
         }
+        arePlatformsActive = false;
     }
 
     public override void getStomped()
@@ -124,6 +143,7 @@ public class Big_Slimeghter : Basic_Boss {
         print(gameObject.name + ", isRecoverying? " + isRecoverying);
         if (!tookDamage && !IsInvoking("summonHelp") && !isRecoverying && help == null)
         {
+            halfSummonHelp();
             Invoke("summonHelp", timeBetweenHelp);
             print("invoking help");
         }
@@ -156,6 +176,8 @@ public class Big_Slimeghter : Basic_Boss {
         if (tookDamage)
         {
             pickRoutine(1);
+            summonBees();
+            minimize();
             tookDamage = false;
         }
         else
@@ -174,23 +196,48 @@ public class Big_Slimeghter : Basic_Boss {
         getStomped();
     }
 
+    public void halfSummonHelp()
+    {
+        if (!arePlatformsActive)
+        {
+            activatePlatforms();
+            for (int i = 0; i < bossPlatforms.Length; i++)
+            {
+                Renderer[] renderers = bossPlatforms[i].GetComponentsInChildren<Renderer>();
+                foreach (Renderer r in renderers)
+                {
+                    r.material.color = new Color32(255, 255, 255, 30);
+                }
+                bossPlatforms[i].GetComponent<Collider2D>().enabled = false;
+
+            }
+        }
+    }
+
     public void summonHelp()
     {
-        CancelInvoke("unsummonHelp");
+        CancelInvoke("unSummonHelp");
         if (help == null)
         {
             activatePlatforms();
             for (int i = 0; i < bossPlatforms.Length; i++)
             {
-                if (0.5f < Random.value || i == (bossPlatforms.Length - 1))
+                Renderer[] renderers = bossPlatforms[i].GetComponentsInChildren<Renderer>();
+                foreach (Renderer r in renderers)
+                {
+                    r.material.color = new Color32(255, 255, 255, 255);
+                }
+                bossPlatforms[i].GetComponent<Collider2D>().enabled = true;
+                if ((0.5f < Random.value || i != (bossPlatforms.Length - 1)) && help == null)
                 {
                     help = Instantiate(helpPrefab);
                     help.transform.position = new Vector2(bossPlatforms[i].transform.position.x, bossPlatforms[i].transform.position.y + 2);
-                    break;
                 }
+
             }
-            if (!IsInvoking("unsummonHelp"))
-                Invoke("unsummonHelp", 6f);
+            /* Removed because it was not fun
+             * if (!IsInvoking("unSummonHelp"))
+                Invoke("unSummonHelp", 8f);*/
         }
     }
 
@@ -198,5 +245,39 @@ public class Big_Slimeghter : Basic_Boss {
     {
         Destroy(help);
         deactivatePlatforms();
+    }
+
+    public void minimize()
+    {
+        if (Mathf.Abs(transform.localScale.x) > 1 && transform.localScale.y > 1)
+            transform.localScale = new Vector3(transform.localScale.x - 1 * Mathf.Sign(transform.localScale.x), transform.localScale.y - 1, transform.localScale.z);
+    }
+
+    public void summonBees()
+    {
+        print("Summoning bees");
+        for (int i = 0; i<BeeSpawners.Length && i<2; i++)
+        {
+            Bee_Spawn bs = BeeSpawners[i].GetComponent<Bee_Spawn>();
+            if (i == 0)
+            {
+                bs.spawnPrefabLookingLeft = false;
+            }
+            bs.Spawn();    
+        }
+    }
+
+    public void summonDoubleBees()
+    {
+        summonBees();
+        for (int i = 2; i < BeeSpawners.Length && i < 4; i++)
+        {
+            Bee_Spawn bs = BeeSpawners[i].GetComponent<Bee_Spawn>();
+            if (i%2 == 0)
+            {
+                bs.spawnPrefabLookingLeft = false;
+            }
+            bs.Spawn();
+        }
     }
 }

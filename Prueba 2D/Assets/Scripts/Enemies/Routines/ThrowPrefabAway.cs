@@ -8,18 +8,23 @@ public class ThrowPrefabAway : MonoBehaviour
     public int amount = 2;
     public Vector2 force = new Vector2(2 , 5);
     public GameObject prefab;
+
     private Animator anim;
+    private GameObject spawns;
 
     void Start()
     {
         Invoke("throwSlimeghter",0.1f);
+        spawns = GameObject.Find(gameObject.name + "-Spawns");
+        if (spawns == null)
+            spawns = new GameObject(gameObject.name + "-Spawns");
     }
 
     public void throwSlimeghter()
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject instance = Instantiate(prefab);
+            GameObject instance = Instantiate(prefab, spawns.transform);
             instance.transform.position = transform.position;
             float xForce = force.x * Mathf.Cos( ((float)i) / (amount - 1) * Mathf.PI);
             Vector2 rotatedForce = new Vector2(xForce, force.y);

@@ -9,6 +9,8 @@ public class Sky_Attacking_Controller : MonoBehaviour {
     public float tremblePower = 1f;
     public float trembleIncrementPerFrame = 30f;
     public GameObject attackPrefab;
+    public AudioClip chargingSound;
+    public AudioClip releaseSound;
 
     private Animator anim;
     Horizontal_Line_Speed hls;
@@ -39,11 +41,12 @@ public class Sky_Attacking_Controller : MonoBehaviour {
         hls.speed = tremblePower;
         hls.distance = trembleDistance;
         hls.turnSpriteOnComple = false;
-        Invoke("shoot", 1.5f);
+        Invoke("shoot", 2f);
         bullet = Instantiate(attackPrefab);
         bullet.transform.position = new Vector3 (transform.position.x, transform.position.y - 0.5f, transform.position.z);
         bullet.GetComponent<LinearInfinite>().speed = Vector2.zero;
         isShooting = true;
+        SoundManager.instance.RandomizeSfx(chargingSound);
     }
 
     public void shoot()
@@ -52,6 +55,9 @@ public class Sky_Attacking_Controller : MonoBehaviour {
         isShooting = false;
         Invoke("destroySelf", 1f);
         bullet.GetComponent<LinearInfinite>().speed = new Vector2(0, -3);
+        bullet.GetComponent<AudioSource>().clip = releaseSound;
+        //bullet.GetComponent<AudioSource>().Play();
+        SoundManager.instance.RandomizeSfx(releaseSound);
     }
 
     public void destroySelf()

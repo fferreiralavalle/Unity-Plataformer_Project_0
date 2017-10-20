@@ -12,9 +12,19 @@ public class camara_movement : MonoBehaviour {
 
     private Vector2 velocity;
     private bool hasFallen = false;
+    private float initialYOffset;
+
+    private bool changingYOffset = false;
+    private float newYOffset = 0.5f;
+
+    private bool changingSize = false;
+    private float newSize = 5f;
+
+    private float velAux = 0.1f;
 
     void Start () {
-		if (target == null)
+        initialYOffset = yOffSet;
+        if (target == null)
         {
             target = GameMaster.Instance.getPlayer();
         }
@@ -25,6 +35,18 @@ public class camara_movement : MonoBehaviour {
 	void FixedUpdate () {
         if (target.tag == "Player")
             hasFallen = target.GetComponent<Player_Controller>().hasPlayerFell();
+
+
+        if (changingYOffset)
+        {
+            yOffSet = Mathf.SmoothDamp(
+                yOffSet,
+                newYOffset,
+                ref velAux,
+                smoothTime * 3
+                );
+        }
+        print("VEL AUX = " + velAux);
         if (!hasFallen && canMove)
         {
             float posX = Mathf.SmoothDamp(
@@ -47,6 +69,37 @@ public class camara_movement : MonoBehaviour {
                 );
         }
         
-	}
+        if (changingSize)
+        {
+            GetComponent<Camera>().orthographicSize += 0.5f * Time.deltaTime * Mathf.Sign(newSize);
+            float currentDistance = (newSize - GetComponent<Camera>().orthographicSize) * Mathf.Sign(newYOffset);
+            print("current Camera size Distance = " + currentDistance);
+            if (currentDistance < 0)
+            {
+                GetComponent<Camera>().orthographicSize = newSize;
+                changingSize = false;
+            }
+        }
+
+
+    }
+
+    public void changeYOffset(float newOffset)
+    {
+        changingYOffset = true;
+        newYOffset = newOffset;
+    }
+
+    public void changeSize(float newCamaraSize)
+    {
+        changingSize = true;
+        newSize = newCamaraSize;
+    }
+
+    public void changeYOffsetToIntial()
+    {
+        changingYOffset = true;
+        newYOffset = initialYOffset;
+    }
 
 }
